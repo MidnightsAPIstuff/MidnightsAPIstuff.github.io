@@ -13,17 +13,109 @@
             font-family: 'Courier New', monospace;
             background-color: #000000; /* Solid black background */
         }
+
+        /*
+         * Keyframes for the strobing animation.
+         * The animation will cycle through the rainbow colors from 0% to 100%.
+         */
+        @keyframes strobe-rainbow {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        /*
+         * This custom class handles the rainbow gradient and the strobing animation.
+         * The text uses a background clip, and the animation is applied to the element.
+         */
+        .rainbow-effect {
+            /* Rainbow text effect */
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent; /* Fallback for browsers that don't support the above */
+            
+            /* Apply the animation to the element */
+            animation: strobe-rainbow 1s linear infinite;
+        }
+
+        /* Styling for the input field to match the terminal theme */
+        .terminal-input {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            width: calc(100% - 150px); /* Adjust width to fit next to the prompt */
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-gray-950 text-green-500 font-mono text-xl p-8 rounded-2xl border-4 border-green-500 shadow-2xl max-w-lg w-full overflow-auto">
-        <pre class="whitespace-pre-wrap break-words">
-this is a GAG selling/buying/stock Server. Join It!
-https://discord.gg/Jrx9wvYZ2w
-We Are Trusted!
-Sheckle Giveaways!
-join today
-</pre>
+<body class="min-h-screen p-4">
+    <!-- Main terminal container with rainbow effect -->
+    <div class="font-mono text-xl rainbow-effect">
+        <!-- Pre element to display output from commands -->
+        <pre id="output-text" class="whitespace-pre-wrap"></pre>
+
+        <!-- Input line with "Command@DiscoBee >" prompt -->
+        <div class="flex items-center">
+            <pre class="whitespace-pre-wrap">Command@DiscoBee > </pre>
+            <input id="command-input" type="text" class="terminal-input font-mono text-xl">
+        </div>
     </div>
+
+    <script>
+        // Use window.onload to ensure the DOM is fully loaded before running the script.
+        window.onload = function() {
+            // Get references to the input and output elements
+            const commandInput = document.getElementById('command-input');
+            const outputText = document.getElementById('output-text');
+            const promptText = "Command@DiscoBee > ";
+            const originalText = "https://discord.gg/JaxeFpkzAb   -   Join For **FREE** Disco Bee     |    Commands: Roblox, Join";
+
+            // Set the initial text in the output area
+            outputText.textContent = originalText + "\n";
+
+            // Focus the input field when the page loads
+            commandInput.focus();
+            
+            // Add event listener for key presses on the input field
+            commandInput.addEventListener('keydown', function(event) {
+                // Check if the pressed key is "Enter"
+                if (event.key === 'Enter') {
+                    // Prevent the default action to avoid form submission
+                    event.preventDefault();
+                    
+                    // Get the trimmed value from the input field
+                    const command = commandInput.value.trim().toLowerCase();
+                    let responseText = "";
+
+                    // Append the command and prompt to the output text
+                    outputText.textContent += promptText + command + "\n";
+                    
+                    if (command === "join") {
+                        // Open the Discord link in a new tab
+                        window.open('https://discord.gg/JaxeFpkzAb', '_blank');
+                        responseText = "Joining server";
+                    } else if (command === "roblox") {
+                        // Display the Roblox message
+                        responseText = "Follow gagm00ded On Roblox For 10 Quadrillion Sheckles";
+                    } else {
+                        // Handle unrecognized commands
+                        responseText = "Type A Real Command";
+                    }
+
+                    // Append the response to the output text
+                    outputText.textContent += responseText + "\n";
+
+                    // Clear the input field for the next command
+                    commandInput.value = "";
+
+                    // Scroll to the bottom of the output area
+                    outputText.scrollTop = outputText.scrollHeight;
+                }
+            });
+        };
+    </script>
 </body>
 </html>
