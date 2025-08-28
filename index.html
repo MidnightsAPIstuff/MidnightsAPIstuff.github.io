@@ -48,6 +48,8 @@
             border: none;
             outline: none;
             width: calc(100% - 150px); /* Adjust width to fit next to the prompt */
+            resize: none; /* Disable resizing for a cleaner look */
+            white-space: pre-wrap; /* Preserve whitespace and handle wrapping */
         }
     </style>
 </head>
@@ -57,10 +59,20 @@
         <!-- Pre element to display output from commands -->
         <pre id="output-text" class="whitespace-pre-wrap"></pre>
 
+        <!-- A hidden pre block to hold the ASCII art. You can paste your art here. -->
+        <pre id="ascii-art" class="whitespace-pre-wrap hidden">
+    ____  _                    ____               _____ __                   
+   / __ \(_)_____________     / __ )___  ___     / ___// /_  ____  ____      
+  / / / / / ___/ ___/ __ \   / __  / _ \/ _ \    \__ \/ __ \/ __ \/ __ \     
+ / /_/ / (__  ) /__/ /_/ /  / /_/ /  __/  __/   ___/ / / / / /_/ / /_/ /     
+/_____/_/____/\___/\____/  /_____/\___/\___/   /____/_/ /_/\____/ .___/      
+                                                               /_/    
+        </pre>
+
         <!-- Input line with "Command@DiscoBee >" prompt -->
         <div class="flex items-center">
             <pre class="whitespace-pre-wrap">Command@DiscoBee > </pre>
-            <input id="command-input" type="text" class="terminal-input font-mono text-xl">
+            <textarea id="command-input" class="terminal-input font-mono text-xl" rows="1"></textarea>
         </div>
     </div>
 
@@ -70,11 +82,18 @@
             // Get references to the input and output elements
             const commandInput = document.getElementById('command-input');
             const outputText = document.getElementById('output-text');
+            const asciiArt = document.getElementById('ascii-art');
             const promptText = "Command@DiscoBee > ";
-            const originalText = "https://discord.gg/JaxeFpkzAb   -   Join For **FREE** Disco Bee     |    Commands: Roblox, Join";
 
-            // Set the initial text in the output area
-            outputText.textContent = originalText + "\n";
+            // Array to hold the initial lines of text
+            const initialText = [
+                "https://discord.gg/JaxeFpkzAb   -   Join For **FREE** Disco Bee",
+                "-----------------------------------------------------------------------",
+                "                           disco bee shop"
+            ];
+            
+            // Join the array elements with a newline character and set the initial text
+            outputText.textContent = initialText.join('\n') + "\n" + asciiArt.textContent.trim() + "\n";
 
             // Focus the input field when the page loads
             commandInput.focus();
@@ -87,26 +106,22 @@
                     event.preventDefault();
                     
                     // Get the trimmed value from the input field
-                    const command = commandInput.value.trim().toLowerCase();
-                    let responseText = "";
+                    const command = commandInput.value.trim(); // Do not convert to lowercase here
 
                     // Append the command and prompt to the output text
                     outputText.textContent += promptText + command + "\n";
                     
-                    if (command === "join") {
+                    if (command.toLowerCase() === "join") {
                         // Open the Discord link in a new tab
                         window.open('https://discord.gg/JaxeFpkzAb', '_blank');
-                        responseText = "Joining server";
-                    } else if (command === "roblox") {
+                        outputText.textContent += "Joining server...\n";
+                    } else if (command.toLowerCase() === "roblox") {
                         // Display the Roblox message
-                        responseText = "Follow gagm00ded On Roblox For 10 Quadrillion Sheckles";
-                    } else {
+                        outputText.textContent += "Follow gagm00ded On Roblox For 10 Quadrillion Sheckles\n";
+                    } else if (command.trim() !== '') {
                         // Handle unrecognized commands
-                        responseText = "Type A Real Command";
+                        outputText.textContent += "Unknown command. Please type 'join' or 'roblox'.\n";
                     }
-
-                    // Append the response to the output text
-                    outputText.textContent += responseText + "\n";
 
                     // Clear the input field for the next command
                     commandInput.value = "";
@@ -114,6 +129,12 @@
                     // Scroll to the bottom of the output area
                     outputText.scrollTop = outputText.scrollHeight;
                 }
+            });
+            
+            // Auto-resize the textarea based on its content
+            commandInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
             });
         };
     </script>
