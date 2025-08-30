@@ -64,12 +64,12 @@
 </head>
 <body class="min-h-screen p-4">
 
-    <img src="https://files.catbox.moe/3w4p7m.png" alt="DiscoBee" class="logo">
+    <img src="https://files.catbox.moe/3w4p7m.png" alt="Your Logo" class="logo">
 
     <div class="font-mono text-xl rainbow-effect">
         <pre id="output-text" class="whitespace-pre-wrap"></pre>
 
-        <pre id="ascii-art" class="whitespace-pre-wrap">            
+        <pre id="ascii-art" class="whitespace-pre-wrap hidden">            
                                                             
                                 @@@@@@@@@       @@@@                  
                                   @@@@@@@       @@@@@@@@              
@@ -99,9 +99,9 @@
                                @@@@###########################@@@@%#######%@@@@    
                                    @@@%#############################%@@@@@@      
                                      @@@@%###################%%@@@@@          
-                                         @@@@%#########%%@@@@@@          | CMDs: "roblox" | 10 quadrillion checkle for following roblox
+                                         @@@@%#########%%@@@@@@         | CMDs: "roblox" | 10 quadrillion checkle for following roblox
                                              @@@@%#%@@@@@@              | CMDs: "join" | joins the discord for disco bees
-                                                 @@@                   | https://discord.gg/JaxeFpkzAb FREE DISCO BEES
+                                                 @@@                    | https://discord.gg/JaxeFpkzAb FREE DISCO BEES
         </pre>
 
         <div class="flex items-center">
@@ -125,6 +125,7 @@
             ];
             
             // Join the array elements with a newline character and set the initial text
+            // The ASCII art is retrieved from the hidden pre tag and added here.
             outputText.textContent = initialText.join('\n') + "\n" + asciiArt.textContent.trim() + "\n";
 
             // Focus the input field when the page loads
